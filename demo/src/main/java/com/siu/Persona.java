@@ -13,22 +13,10 @@ public class Persona {
         this.cursos = cursos;
     }
 
-    public void inscribirseCurso(Curso curso) {
-
+    public void agregarRol(Rol rol) {
+        roles.add(rol);
     }
+
 
 }
 
-// PERSONA  
-// Rol
-// Alumno
-// Profesor
-// Administrador
-// Examen
-// Tema
-// Curso
-// Criterio
-// CriterioSimple
-// CriterioPromedio
-// CriterioCombinado
-    

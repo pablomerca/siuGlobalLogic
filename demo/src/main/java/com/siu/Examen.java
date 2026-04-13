@@ -32,8 +32,15 @@ public class Examen {
         return nota;
     }
 
-    public boolean esDelAlumno(Alumno alumno) {
-        
+    public boolean esDelAlumno(Alumno alumnoComparado) {
+        return this.alumno.equals(alumnoComparado);
     }
-    
+
+    public void cargarNota(float nota, Alumno alumno){
+        if (esDelAlumno(alumno)) {
+            this.nota = nota;
+        } else {
+            System.out.println("El alumno no corresponde al examen.");
+        }
+    }
 }

@@ -2,23 +2,27 @@ package com.siu;
 
 import java.util.List;
 
-public class Profesor extends Rol{
+public class Profesor extends Rol {
     private List<Curso> cursosDictados; 
 
     public Profesor(String nombre) {
         super(nombre);
     }
 
-    public List<Curso> ListarCursosDictados() {
+    public List<Curso> listarCursosDictados() {
         return cursosDictados;
     }
 
-    public void AgregarTema (Tema tema, Curso curso){
-        // TODO: Implementar lógica para agregar un tema a un curso específico
+    public void agregarTema (Tema tema, Curso curso){
+        curso.agregarTema(tema);
     }
 
-    public void AgregarExamen (Examen examen, Curso curso){
-        // TODO: Implementar lógica para agregar un examen a un curso específico
+    public void agregarExamen (Examen examen, Curso curso){
+        curso.agregarExamen(examen);
+    }
+
+    public void cargarNota(float nota, Alumno alumno, Examen examen){
+        examen.cargarNota(nota, alumno);
     }
       
 }

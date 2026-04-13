@@ -6,7 +6,7 @@ public class Alumno extends Rol{
     }
 
     public void realizarInscripcion (Curso curso) {
-        // TODO: Implementar lógica de inscripción
+        curso.inscribirAlumno(this);
     }
 
     @Override

@@ -22,7 +22,12 @@ public class CriterioPromedio implements Criterio {
     }
 
     @Override
-    public boolean alumnoAprobo(Alumno alumno, List<Examen> examenes) {
-        return cumplePromedio(alumno, examenes.get(0).getCurso());
+    public boolean alumnoAprobo(List<Examen> examenes) {
+        float promedio = 0;
+        for (Examen examen : examenes) {
+            promedio += examen.getNota();
+        }
+        promedio /= examenes.size();
+        return promedio >= promedioMinimo;
     }
 }
