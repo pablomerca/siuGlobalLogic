@@ -6,10 +6,10 @@ public class Examen {
 
     private List<Tema> temas;
     private Curso curso;
-    private Alumno alumno;
+    private Persona alumno;
     private float nota;
 
-    public Examen(List<Tema> temas, Curso curso, Alumno alumno, float nota) {
+    public Examen(List<Tema> temas, Curso curso, Persona alumno, float nota) {
         this.temas = temas;
         this.curso = curso;
         this.alumno = alumno;
@@ -24,7 +24,7 @@ public class Examen {
         return curso;
     }
 
-    public Alumno getAlumno() {
+    public Persona getAlumno() {
         return alumno;
     }
 
@@ -32,11 +32,11 @@ public class Examen {
         return nota;
     }
 
-    public boolean esDelAlumno(Alumno alumnoComparado) {
+    public boolean esDelAlumno(Persona alumnoComparado) {
         return this.alumno.equals(alumnoComparado);
     }
 
-    public void cargarNota(float nota, Alumno alumno){
+    public void cargarNota(float nota, Persona alumno){
         if (esDelAlumno(alumno)) {
             this.nota = nota;
         } else {

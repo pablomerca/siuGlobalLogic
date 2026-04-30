@@ -1,7 +1,6 @@
 package com.siu;
 
 import java.util.List;
-import java.util.Scanner;
 
 public class CriterioPromedio implements Criterio {
     private float promedioMinimo;
@@ -9,15 +8,7 @@ public class CriterioPromedio implements Criterio {
         this.promedioMinimo = promedioMinimo;
     }
 
-    public static void main(String[] args) {
-        // promedio minimo seteable por consola
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Ingrese el promedio minimo para aprobar: ");
-        float promedioMinimo = scanner.nextFloat();
-        CriterioPromedio criterio = new CriterioPromedio(promedioMinimo);
-    }
-
-    public boolean cumplePromedio(Alumno alumno, Curso curso) {
+    public boolean cumplePromedio(Persona alumno, Curso curso) {
         return curso.calcularPromedio(alumno) >= promedioMinimo;
     }
 

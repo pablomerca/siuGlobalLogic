@@ -10,20 +10,26 @@ public class Curso {
     private boolean disponible;
     private List<Tema> temas;
     private Criterio criterioAprobacion;
-    private Set<Profesor> profesores;
-    private Set<Alumno> alumnos;
+    private Set<Persona> profesores;
+    private Set<Persona> alumnos;
     private List<Examen> examenes;
-    private List<Alumno> alumnosReprobados;
-    private List<Alumno> alumnosAprobados;
-    private List<Alumno> alumnosPendientes;
     
-    public Curso(String nombre, List<Profesor> profesores) {
+    public Curso(String nombre, List<Persona> profesores) {
         this.nombre = nombre;
-        this.profesores = new HashSet<>(profesores);
+        this.profesores = new HashSet<>();
+        if (profesores != null) {
+            modificarProfesores(profesores);
+        }
+        this.temas = new ArrayList<>();
+        this.examenes = new ArrayList<>();
+        this.alumnos = new HashSet<>();
         this.disponible = false;
     }
 
-    public float calcularPromedio(Alumno alumno){
+    public float calcularPromedio(Persona alumno){
+        if (examenes.isEmpty()) {
+            return 0;
+        }
         float sumaNotas = 0;
         for (var examen : examenes) {
             if (examen.getAlumno().equals(alumno)) {
@@ -37,16 +43,15 @@ public class Curso {
         return examenes.size();
     }    
 
-    //public ConsultarExamenes()
-    
-    public void consultarNotas(Alumno alumno){
+    public void consultarNotas(Persona alumno){
         List<Examen> examenes_alumno = obtenerExamenesPorAlumno(alumno);
         for (var examen : examenes_alumno) {
             System.out.println(" - Nota: " + examen.getNota());
         }
     }
     
-    public List<Alumno> listarEstadoAlumnosAprobados(){
+    public List<Persona> listarEstadoAlumnosAprobados(){
+        List<Persona> alumnosAprobados = new ArrayList<>();
         for (var alumno : alumnos) {
             if (alumnoAprobo(alumno)) {
                 alumnosAprobados.add(alumno);
@@ -55,16 +60,18 @@ public class Curso {
         return alumnosAprobados;
     }
     
-    public List<Alumno> listarEstadoAlumnosPendientes(){
+    public List<Persona> listarEstadoAlumnosPendientes(){
+        List<Persona> alumnosPendientes = new ArrayList<>();
         for (var alumno : alumnos) {
-            if (!alumnoAprobo(alumno) && !alumnosReprobados.contains(alumno)) {
+            if (!alumnoAprobo(alumno)) {
                 alumnosPendientes.add(alumno);
             }
         }
         return alumnosPendientes;
     }
 
-    public List<Alumno> listarEstadoAlumnosReprobados(){
+    public List<Persona> listarEstadoAlumnosReprobados(){
+        List<Persona> alumnosReprobados = new ArrayList<>();
         for (var alumno : alumnos) {
             if (!alumnoAprobo(alumno)) {
                 alumnosReprobados.add(alumno);
@@ -73,7 +80,7 @@ public class Curso {
         return alumnosReprobados;
     }
 
-    private List<Examen> obtenerExamenesPorAlumno(Alumno alumno) {
+    private List<Examen> obtenerExamenesPorAlumno(Persona alumno) {
         List<Examen> examenes_alumno = new ArrayList<>();
         for (var examen : this.examenes) {
             if (examen.esDelAlumno(alumno)) {
@@ -83,8 +90,11 @@ public class Curso {
         return examenes_alumno;
     }
 
-    private boolean alumnoAprobo(Alumno alumno){
+    private boolean alumnoAprobo(Persona alumno){
         List<Examen> examenes = obtenerExamenesPorAlumno(alumno); 
+        if (criterioAprobacion == null || examenes.isEmpty()) {
+            return false;
+        }
         return criterioAprobacion.alumnoAprobo(examenes);
     }
 
@@ -96,7 +106,10 @@ public class Curso {
         examenes.add(examen);
     }
 
-    public void inscribirAlumno(Alumno alumno) {
+    public void inscribirAlumno(Persona alumno) {
+        if (alumno != null && !alumno.tieneRol(Rol.ALUMNO)) {
+            throw new IllegalStateException("La persona no tiene el rol requerido: " + Rol.ALUMNO);
+        }
         alumnos.add(alumno);
     }
 
@@ -104,8 +117,17 @@ public class Curso {
         this.nombre = nombre;
     }
 
-    public void modificarProfesores(List<Profesor> profesores) {
-        this.profesores = new HashSet<>(profesores);
+    public void modificarProfesores(List<Persona> profesores) {
+        Set<Persona> profesoresNuevos = new HashSet<>();
+        if (profesores != null) {
+            for (Persona profesor : profesores) {
+                if (profesor == null || !profesor.tieneRol(Rol.PROFESOR)) {
+                    throw new IllegalStateException("La persona no tiene el rol requerido: " + Rol.PROFESOR);
+                }
+                profesoresNuevos.add(profesor);
+            }
+        }
+        this.profesores = profesoresNuevos;
     }
 
     public void activarCurso() {
